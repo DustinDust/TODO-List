@@ -1,6 +1,7 @@
 import Piority from "../type/Piority";
 import TodoItemType from "../type/TodoItem";
 import Card from "./UI/Card";
+import { parse } from "date-fns";
 
 const TodoItem = ({
   id,
@@ -12,6 +13,12 @@ const TodoItem = ({
   id: number;
   content: HTMLDivElement;
   toggleEditable: () => void;
+  getData: () => {
+    title: string;
+    description: string;
+    due: Date;
+    piority: Piority;
+  };
 } => {
   const titleNode: HTMLHeadElement = document.createElement("h2");
   titleNode.textContent = `${title}`;
@@ -41,10 +48,20 @@ const TodoItem = ({
     piorityNode.disabled = !piorityNode.disabled;
   };
 
+  const getData = () => {
+    return {
+      title: titleNode.textContent!,
+      description: descNode.textContent!,
+      due: parse(dueDateNode.value, "yyyy-MM-dd", dueDate)!,
+      piority: <Piority>piorityNode.value!,
+    };
+  };
+
   return {
     id: id,
     content: Card(titleNode, descNode, dueDateNode, piorityNode),
     toggleEditable: toggleEditable,
+    getData: getData,
   };
 };
 

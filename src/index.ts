@@ -4,6 +4,8 @@ import TodoItemType from "./type/TodoItem";
 import TodoList from "./components/TodoList";
 
 import { addDays } from "date-fns";
+import _ from "lodash";
+import Piority from "./type/Piority";
 
 const todoItem1: TodoItemType = {
   id: 0,
@@ -22,7 +24,48 @@ const todoItem2: TodoItemType = {
 };
 
 const TodoData = (function (todoItems: TodoItemType[]) {
-  let list: TodoItemType[] = todoItems.map((val) => val);
+  const exist: boolean[] = new Array(100000);
+  exist.fill(false);
+
+  let list = todoItems.map((item) => {
+    exist[item.id] = true;
+    return item;
+  });
+
+  const saveToLocalStorage = () => {
+    if (localStorage.getItem("todolist") !== null) {
+      localStorage.removeItem("todolist");
+    }
+    localStorage.setItem("todolist", JSON.stringify(list));
+  };
+
+  const addItem = (
+    title: string,
+    desc: string,
+    due: Date,
+    piority: Piority
+  ) => {
+    let id = -1;
+    for (let i = 0; i < exist.length; i++) {
+      if (exist[i] === false) {
+        id = i;
+        exist[i] = true;
+        break;
+      }
+    }
+    if (id != -1) {
+      const newItem: TodoItemType = {
+        id: id,
+        title: title,
+        description: desc,
+        dueDate: due,
+        piority: piority,
+      };
+      list.push(newItem);
+    }
+    saveToLocalStorage();
+  };
+
   const updateList = (newItem: TodoItemType) => {
     for (const item of list) {
       if (item.id === newItem.id) {
@@ -32,17 +75,20 @@ const TodoData = (function (todoItems: TodoItemType[]) {
         item.piority = newItem.piority;
       }
     }
+    saveToLocalStorage();
   };
 
   const deleteItem = (id: number) => {
     list = list.filter((item) => item.id !== id);
-    console.log(list);
+    exist[id] = false;
+    saveToLocalStorage();
   };
 
   return {
     data: list,
     updateItemWithId: updateList,
     deleteItemWithId: deleteItem,
+    addItem: addItem,
   };
 })([todoItem1, todoItem2]);
 
