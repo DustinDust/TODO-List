@@ -1,10 +1,10 @@
-import Piority from "./Piority";
-
-type TodoItemType = {
-  id: number;
+type TodoItem = {
+  id: string;
   title: string;
   description: string;
   dueDate: Date;
-  piority: Piority;
+  priority: 'A' | 'B' | 'C' | 'D';
+  state: 'r' | 'd' | 'o';
 };
-export default TodoItemType;
+
+export default TodoItem;

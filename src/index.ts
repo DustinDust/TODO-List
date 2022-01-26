@@ -1,100 +1,102 @@
-import "./styles/style.css";
-import TodoItem from "./components/TodoItem";
-import TodoItemType from "./type/TodoItem";
-import TodoList from "./components/TodoList";
+import Project from "./type/Project";
+import TodoItem from "./type/TodoItem";
 
-import { addDays } from "date-fns";
-import _ from "lodash";
-import Piority from "./type/Piority";
+import { makeid } from "./utils";
 
-const todoItem1: TodoItemType = {
-  id: 0,
-  title: "demo",
-  description: "demo-desc",
-  piority: "A",
-  dueDate: addDays(new Date(), 7),
-};
+const logicWorkModule = (function () {
+  const dataStr = localStorage.getItem("projectdata");
+  let data: Project[] = [];
+  if (dataStr === null) {
+    data = [
+      {
+        id: makeid(10),
+        name: "Default project",
+        todoList: [
+          {
+            id: makeid(20),
+            title: "Getting started!",
+            description: "Try creating some new tasks!",
+            dueDate: new Date(),
+            priority: "A",
+            state: "r",
+          },
+        ],
+      },
+    ];
+  } else {
+    data = JSON.parse(dataStr);
+  }
 
-const todoItem2: TodoItemType = {
-  id: 1,
-  title: "demo",
-  description: "demo-desc2",
-  piority: "B",
-  dueDate: new Date(),
-};
-
-const TodoData = (function (todoItems: TodoItemType[]) {
-  const exist: boolean[] = new Array(100000);
-  exist.fill(false);
-
-  let list = todoItems.map((item) => {
-    exist[item.id] = true;
-    return item;
-  });
-
-  const saveToLocalStorage = () => {
-    if (localStorage.getItem("todolist") !== null) {
-      localStorage.removeItem("todolist");
-    }
-    localStorage.setItem("todolist", JSON.stringify(list));
-  };
-
-  const addItem = (
-    title: string,
-    desc: string,
-    due: Date,
-    piority: Piority
-  ) => {
-    let id = -1;
-    for (let i = 0; i < exist.length; i++) {
-      if (exist[i] === false) {
-        id = i;
-        exist[i] = true;
-        break;
+  const updateTodoItem = (projectId: string, updatedItem: TodoItem) => {
+    for (const project of data) {
+      if (projectId === project.id) {
+        for (const item of project.todoList) {
+          if (item.id === updatedItem.id) {
+            item.state = updatedItem.state;
+            item.dueDate = updatedItem.dueDate;
+            item.title = updatedItem.title;
+            item.description = updatedItem.description;
+            item.priority = updatedItem.priority;
+          }
+        }
       }
     }
-    if (id != -1) {
-      const newItem: TodoItemType = {
-        id: id,
-        title: title,
-        description: desc,
-        dueDate: due,
-        piority: piority,
-      };
-      list.push(newItem);
-    }
-    saveToLocalStorage();
+    localStorage.setItem("projectdata", JSON.stringify(data));
   };
 
-  const updateList = (newItem: TodoItemType) => {
-    for (const item of list) {
-      if (item.id === newItem.id) {
-        item.title = newItem.title;
-        item.description = newItem.description;
-        item.dueDate = newItem.dueDate;
-        item.piority = newItem.piority;
+  const deleteTodoItem = (projectId: string, deletedItemId: string) => {
+    for (const project of data) {
+      if (project.id === projectId) {
+        project.todoList = project.todoList.filter(
+          (item) => item.id !== deletedItemId
+        );
       }
     }
-    saveToLocalStorage();
+    localStorage.setItem("projectdata", JSON.stringify(data));
   };
 
-  const deleteItem = (id: number) => {
-    list = list.filter((item) => item.id !== id);
-    exist[id] = false;
-    saveToLocalStorage();
+  const deleteProject = (projectId: string) => {
+    data = data.filter((project) => project.id !== projectId);
+    localStorage.setItem("projectdata", JSON.stringify(data));
+  };
+
+  const addProject = (name: string) => {
+    const newProject: Project = {
+      id: makeid(10),
+      name: name,
+      todoList: [],
+    };
+    data.push(newProject);
+    localStorage.setItem("projectdata", JSON.stringify(data));
+  };
+
+  const addTodoItemToProject = (projectId: string, addedTodoItem: TodoItem) => {
+    for (const project of data) {
+      if (project.id === projectId) {
+        project.todoList.push(addedTodoItem);
+      }
+    }
+    localStorage.setItem("projectdata", JSON.stringify(data));
+  };
+
+  const getTodoList = (projectId: string) => {
+    for (const project of data) {
+      if (project.id === projectId) {
+        return project.todoList;
+      }
+    }
+  };
+
+  const getData = () => {
+    return data;
   };
 
   return {
-    data: list,
-    updateItemWithId: updateList,
-    deleteItemWithId: deleteItem,
-    addItem: addItem,
+    addProject,
+    addTodoItemToProject,
+    updateTodoItem,
+    deleteProject,
+    deleteTodoItem,
+    getTodoList,
   };
-})([todoItem1, todoItem2]);
-
-const demoitem = TodoItem(todoItem1);
-const demoitem2 = TodoItem(todoItem2);
-
-document.body.appendChild(TodoList(demoitem, demoitem2));
-
-export { TodoData };
+})();
