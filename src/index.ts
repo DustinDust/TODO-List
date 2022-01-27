@@ -1,30 +1,66 @@
-import Project from "./type/Project";
-import TodoItem from "./type/TodoItem";
+import {parse} from 'date-fns';
+import {head} from 'lodash';
+import Container from './components/Project/Container';
+import Card from './components/UI/Card';
+import Footer from './components/UI/Footer';
+import Header from './components/UI/Header';
+import Project from './type/Project';
+import TodoItem from './type/TodoItem';
 
-import { makeid } from "./utils";
+import {makeid} from './utils';
+
+const defaultProject: Project[] = [
+  {
+    id: makeid(10),
+    name: 'Default project',
+    todoList: [
+      {
+        id: makeid(20),
+        title: 'Getting started!',
+        description: 'Try creating some new tasks!',
+        dueDate: new Date(),
+        priority: 'A',
+        state: 'r',
+      },
+      {
+        id: makeid(20),
+        title: 'More and More!',
+        description: 'Try marking something as done for the first time!',
+        dueDate: new Date(),
+        priority: 'A',
+        state: 'r',
+      },
+    ],
+  },
+];
 
 const logicWorkModule = (function () {
-  const dataStr = localStorage.getItem("projectdata");
+  const dataStr = localStorage.getItem('projectdata');
   let data: Project[] = [];
   if (dataStr === null) {
-    data = [
-      {
-        id: makeid(10),
-        name: "Default project",
-        todoList: [
-          {
-            id: makeid(20),
-            title: "Getting started!",
-            description: "Try creating some new tasks!",
-            dueDate: new Date(),
-            priority: "A",
-            state: "r",
-          },
-        ],
-      },
-    ];
+    data = defaultProject;
   } else {
     data = JSON.parse(dataStr);
+    if (data.length === 0) {
+      data = defaultProject;
+    } else {
+      data = data.map((project) => {
+        return {
+          id: project.id,
+          name: project.name,
+          todoList: project.todoList.map((item) => {
+            return {
+              id: item.id,
+              title: item.title,
+              description: item.description,
+              priority: item.priority,
+              state: item.state,
+              dueDate: new Date(item.dueDate),
+            };
+          }),
+        };
+      });
+    }
   }
 
   const updateTodoItem = (projectId: string, updatedItem: TodoItem) => {
@@ -41,7 +77,7 @@ const logicWorkModule = (function () {
         }
       }
     }
-    localStorage.setItem("projectdata", JSON.stringify(data));
+    localStorage.setItem('projectdata', JSON.stringify(data));
   };
 
   const deleteTodoItem = (projectId: string, deletedItemId: string) => {
@@ -52,12 +88,7 @@ const logicWorkModule = (function () {
         );
       }
     }
-    localStorage.setItem("projectdata", JSON.stringify(data));
-  };
-
-  const deleteProject = (projectId: string) => {
-    data = data.filter((project) => project.id !== projectId);
-    localStorage.setItem("projectdata", JSON.stringify(data));
+    localStorage.setItem('projectdata', JSON.stringify(data));
   };
 
   const addProject = (name: string) => {
@@ -67,7 +98,7 @@ const logicWorkModule = (function () {
       todoList: [],
     };
     data.push(newProject);
-    localStorage.setItem("projectdata", JSON.stringify(data));
+    localStorage.setItem('projectdata', JSON.stringify(data));
   };
 
   const addTodoItemToProject = (projectId: string, addedTodoItem: TodoItem) => {
@@ -76,7 +107,7 @@ const logicWorkModule = (function () {
         project.todoList.push(addedTodoItem);
       }
     }
-    localStorage.setItem("projectdata", JSON.stringify(data));
+    localStorage.setItem('projectdata', JSON.stringify(data));
   };
 
   const getTodoList = (projectId: string) => {
@@ -85,6 +116,7 @@ const logicWorkModule = (function () {
         return project.todoList;
       }
     }
+    return [];
   };
 
   const getData = () => {
@@ -95,8 +127,17 @@ const logicWorkModule = (function () {
     addProject,
     addTodoItemToProject,
     updateTodoItem,
-    deleteProject,
     deleteTodoItem,
     getTodoList,
+    getData,
   };
 })();
+
+const header = Header();
+const footer = Footer();
+const container = Container(logicWorkModule.getData());
+
+const root = Card(header, container, footer);
+document.body.appendChild(root);
+
+export {logicWorkModule};
