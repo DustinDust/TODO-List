@@ -1,14 +1,27 @@
-import Card from "./Card";
+import Card from './Card';
 
 const Modal = (...children: Node[]) => {
-  const modalContainer: HTMLDivElement = Card(...children);
-  const toggleState = (): void => {
-    // hide/show the modal
-    modalContainer.classList.toggle("modal-showing");
+  const dropBack: HTMLDivElement = document.createElement('div');
+  dropBack.classList.add('drop-back');
+  const modalContent: HTMLDivElement = Card(...children);
+  modalContent.classList.add('modal-container');
+  const show = () => {
+    document.body.appendChild(modalContent);
+    document.body.appendChild(dropBack);
   };
+  const clear = () => {
+    dropBack.remove();
+    modalContent.remove();
+  };
+  dropBack.addEventListener('click', () => {
+    modalContent.remove();
+    dropBack.remove();
+  });
+
   return {
-    content: modalContainer,
-    toggle: toggleState,
+    modalContent,
+    show,
+    clear,
   };
 };
 

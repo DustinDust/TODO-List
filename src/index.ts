@@ -1,5 +1,3 @@
-import {parse} from 'date-fns';
-import {head} from 'lodash';
 import Container from './components/Project/Container';
 import Card from './components/UI/Card';
 import Footer from './components/UI/Footer';
@@ -7,7 +5,7 @@ import Header from './components/UI/Header';
 import Project from './type/Project';
 import TodoItem from './type/TodoItem';
 
-import {makeid} from './utils';
+import { makeid } from './utils';
 
 const defaultProject: Project[] = [
   {
@@ -28,6 +26,20 @@ const defaultProject: Project[] = [
         description: 'Try marking something as done for the first time!',
         dueDate: new Date(),
         priority: 'A',
+        state: 'r',
+      },
+    ],
+  },
+  {
+    id: makeid(10),
+    name: 'Add more project',
+    todoList: [
+      {
+        id: makeid(20),
+        title: 'sample',
+        description: 'sample description as well',
+        dueDate: new Date(),
+        priority: 'B',
         state: 'r',
       },
     ],
@@ -99,6 +111,7 @@ const logicWorkModule = (function () {
     };
     data.push(newProject);
     localStorage.setItem('projectdata', JSON.stringify(data));
+    return newProject;
   };
 
   const addTodoItemToProject = (projectId: string, addedTodoItem: TodoItem) => {
@@ -138,6 +151,7 @@ const footer = Footer();
 const container = Container(logicWorkModule.getData());
 
 const root = Card(header, container, footer);
+root.classList.add('root');
 document.body.appendChild(root);
 
-export {logicWorkModule};
+export { logicWorkModule };

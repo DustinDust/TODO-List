@@ -1,24 +1,35 @@
-import {logicWorkModule} from '../..';
+import { logicWorkModule } from '../..';
 import Card from '../UI/Card';
 import Project from '../../type/Project';
 import ProjectItem from './ProjectItem';
 import TodoList from '../Todo/TodoList';
+import ProjectInput from '../Input/ProjectInput';
 
 const Container = (data: Project[]) => {
   const container = document.createElement('div');
-  const selectedProject = data[0];
-  const displayTodoList = TodoList(
-    selectedProject.id,
-    selectedProject.todoList
-  );
+
+  container.classList.add('container');
+  const addProjectButton: HTMLButtonElement = document.createElement('button');
+  addProjectButton.textContent = 'Add new project';
+  addProjectButton.addEventListener('click', () => {
+    ProjectInput();
+  });
+
   const projectList = [];
+  let activated = false;
   for (const project of data) {
     const projectCard = ProjectItem(project);
-    if (project.id === selectedProject.id) {
-      projectCard.classList.toggle('activated-project');
+    projectCard.setAttribute('project-id', project.id);
+    if (!activated) {
+      projectCard.classList.add('active-project');
+      activated = true;
     }
     projectList.push(projectCard);
     projectCard.addEventListener('click', () => {
+      document
+        .querySelector('.active-project')
+        ?.classList.toggle('active-project');
+      projectCard.classList.toggle('active-project');
       const ndptdl = TodoList(
         project.id,
         logicWorkModule.getTodoList(project.id)!
@@ -29,7 +40,14 @@ const Container = (data: Project[]) => {
       container.appendChild(ndptdl);
     });
   }
+  const currentActive = document.querySelector('.active-project');
+  const displayTodoList = TodoList(
+    currentActive?.getAttribute('project-id')!,
+    logicWorkModule.getTodoList(currentActive?.getAttribute('project-id')!)
+  );
   const projectListCard = Card(...projectList);
+  projectListCard.classList.add('project-list');
+  projectListCard.appendChild(addProjectButton);
   container.appendChild(projectListCard);
   container.appendChild(displayTodoList);
   return container;

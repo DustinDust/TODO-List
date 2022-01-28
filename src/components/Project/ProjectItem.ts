@@ -1,6 +1,6 @@
 import Card from '../UI/Card';
 import Project from '../../type/Project';
-import {logicWorkModule} from '../..';
+import { logicWorkModule } from '../..';
 
 const ProjectItem = (item: Project) => {
   const projectNameNode = document.createElement('h2');
