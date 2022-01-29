@@ -1,10 +1,11 @@
 import Modal from '../UI/Modal';
-import { logicWorkModule } from '../../index';
+import {logicWorkModule} from '../../index';
 import ProjectItem from '../Project/ProjectItem';
 import TodoList from '../Todo/TodoList';
 
 const ProjectInput = () => {
   const form = document.createElement('form');
+  form.classList.add('form-input');
   const nameInput = document.createElement('input');
   nameInput.type = 'text';
   nameInput.placeholder = 'Project name';
@@ -27,6 +28,7 @@ const ProjectInput = () => {
     const list = document.querySelector('.project-list');
     const projectCard = ProjectItem(newProject);
     projectCard.setAttribute('project-id', newProject.id);
+    projectCard.classList.add('project-card');
     projectCard.addEventListener('click', () => {
       document
         .querySelector('.active-project')
@@ -44,7 +46,7 @@ const ProjectInput = () => {
     clear();
   });
 
-  const { show, clear } = Modal(form, discardButton);
+  const {show, clear} = Modal(form, discardButton);
 
   discardButton.addEventListener('click', () => {
     clear();

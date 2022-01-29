@@ -5,16 +5,15 @@ const Modal = (...children: Node[]) => {
   dropBack.classList.add('drop-back');
   const modalContent: HTMLDivElement = Card(...children);
   modalContent.classList.add('modal-container');
+  dropBack.appendChild(modalContent);
   const show = () => {
-    document.body.appendChild(modalContent);
     document.body.appendChild(dropBack);
   };
   const clear = () => {
     dropBack.remove();
-    modalContent.remove();
   };
-  dropBack.addEventListener('click', () => {
-    modalContent.remove();
+  dropBack.addEventListener('click', (e) => {
+    if (e.currentTarget !== e.target) return;
     dropBack.remove();
   });
 

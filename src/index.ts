@@ -4,6 +4,7 @@ import Footer from './components/UI/Footer';
 import Header from './components/UI/Header';
 import Project from './type/Project';
 import TodoItem from './type/TodoItem';
+import './styles/style.css';
 
 import { makeid } from './utils';
 

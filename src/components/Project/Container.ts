@@ -20,6 +20,7 @@ const Container = (data: Project[]) => {
   for (const project of data) {
     const projectCard = ProjectItem(project);
     projectCard.setAttribute('project-id', project.id);
+    projectCard.classList.add('project-card');
     if (!activated) {
       projectCard.classList.add('active-project');
       activated = true;
@@ -40,7 +41,7 @@ const Container = (data: Project[]) => {
       container.appendChild(ndptdl);
     });
   }
-  const currentActive = document.querySelector('.active-project');
+  const currentActive = projectList[0];
   const displayTodoList = TodoList(
     currentActive?.getAttribute('project-id')!,
     logicWorkModule.getTodoList(currentActive?.getAttribute('project-id')!)

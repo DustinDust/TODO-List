@@ -1,13 +1,14 @@
 import Modal from '../UI/Modal';
 import TodoItem from '../../type/TodoItem';
-import { makeid } from '../../utils';
-import { parse } from 'date-fns';
-import { logicWorkModule } from '../..';
+import {makeid} from '../../utils';
+import {parse} from 'date-fns';
+import {logicWorkModule} from '../..';
 import TodoItemNode from '../Todo/TodoItem';
-import { createTodoCard } from '../Todo/TodoList';
+import {createTodoCard} from '../Todo/TodoList';
 
 const TodoInput = () => {
   const form = document.createElement('form');
+  form.classList.add('form-input');
   const titleInput = document.createElement('input');
   titleInput.type = 'text';
   titleInput.placeholder = 'title';
@@ -81,7 +82,7 @@ const TodoInput = () => {
   const discardButton = document.createElement('button');
   discardButton.textContent = 'Exit';
 
-  const { show, clear } = Modal(form, discardButton);
+  const {show, clear} = Modal(form, discardButton);
   discardButton.addEventListener('click', () => {
     clear();
   });

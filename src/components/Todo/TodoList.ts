@@ -12,12 +12,9 @@ export const createTodoCard = (todoItem: TodoItem, projectId: string) => {
   const deleteButton = document.createElement('button');
   const editButton = document.createElement('button');
   const markAsDoneButton = document.createElement('button');
-  const itemContainerNode = Card(
-    node,
-    deleteButton,
-    editButton,
-    markAsDoneButton
-  );
+  const buttonSection = Card(deleteButton, editButton, markAsDoneButton);
+  buttonSection.classList.add('todo-buttons');
+  const itemContainerNode = Card(node, buttonSection);
 
   deleteButton.textContent = 'Delete';
   editButton.textContent = 'Edit';
@@ -44,7 +41,7 @@ export const createTodoCard = (todoItem: TodoItem, projectId: string) => {
 
     logicWorkModule.updateTodoItem(projectId, updatedData);
   });
-
+  itemContainerNode.classList.add('todoitem-card');
   return itemContainerNode;
 };
 

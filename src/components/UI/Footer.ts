@@ -8,9 +8,11 @@ const Footer = (): HTMLElement => {
   link.href = 'https://github.com/DustinDust/TODO-List';
   const githubIcon = new Image();
   githubIcon.src = icon;
+  githubIcon.classList.add('footer-photo');
   link.appendChild(githubIcon);
   footer.appendChild(copyrightText);
   footer.appendChild(link);
+  footer.classList.add('footer');
   return footer;
 };
 

@@ -1,3 +1,153 @@
-button {
-  background-color: red;
+@import url('https://fonts.googleapis.com/css2?family=Neonderthaw&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@100&family=Neonderthaw&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@100&family=Neonderthaw&family=Zen+Kurenaido&display=swap');
+
+/*font-family: 'Exo 2', sans-serif;
+font-family: 'Neonderthaw', cursive;*/
+
+:root {
+  --bg-color: ;
+  --header-bg-color: #80d8ff;
+  --btn-bg-color: ;
+  --logo-text-color: #455a64;
+  --general-font: 'Exo 2', sans-serif;
+  --logo-font: 'Neonderthaw', cursive;
+  --footer-font: 'Zen Kurenaido', sans-serif;
+}
+
+html {
+  font-size: 10px;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  margin: 0;
+}
+
+.root {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  margin: 0;
+  gap: 2rem;
+  height: 100vh;
+  position: relative;
+}
+
+.header {
+  background-color: var(--header-bg-color);
+}
+
+.logo-text {
+  margin: 0;
+  font-family: var(--logo-font);
+  font-size: 8rem;
+  font-weight: 200;
+  text-align: center;
+  color: var(--logo-text-color);
+}
+
+.footer-photo {
+  width: 3rem;
+}
+
+.footer {
+  font-size: 2rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  font-family: var(--footer-font);
+  position: absolute;
+  height: 2.5rem;
+  bottom: 0;
+  width: 100%;
+}
+
+.container {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  font-family: var(--general-font);
+  font-size: 2rem;
+  padding-bottom: 2.5rem;
+}
+
+.todo-list {
+  display: flex;
+  flex-direction: column;
+  justify-content: stretch;
+  gap: 1rem;
+  flex-grow: 7;
+  width: 30vw;
+}
+
+.todoitem-card {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  position: relative;
+  padding-bottom: 2rem;
+  justify-content: space-between;
+}
+
+.todoitem-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 1%;
+  width: 98%;
+  height: 0.1rem;
+  background-color: black;
+}
+
+.todo-buttons {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.project-list {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  width: 10vw;
+}
+
+.project-card {
+  cursor: pointer;
+  word-wrap: break-word;
+}
+
+.drop-back {
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  overflow: auto;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-container {
+  border-radius: 2rem;
+  padding: 10rem 20rem 10rem 20rem;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 4rem;
+  background-color: white;
+}
+
+.form-input {
+  display: flex;
+  flex-direction: column;
+  justify-content: stretch;
+  gap: 1.5rem;
 }
